@@ -9,7 +9,7 @@ import path from "path";
 import bs58 from "bs58";
 const app = express();
 app.use(express.json());
-const PORT=10000 
+const port=process.env.PORT||4000 
 let account: number = 0;
 let seed: Buffer;
 interface Obj {
@@ -94,6 +94,6 @@ app.get("*", (req: Request, res: Response) => {
   res.redirect("/");
 });
 
-app.listen(PORT, () => {
+app.listen(port, () => {
   console.log("server is running");
 });

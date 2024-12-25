@@ -9,7 +9,7 @@ import path from "path";
 import bs58 from "bs58";
 const app = express();
 app.use(express.json());
-const PORT=3001
+const PORT=10000 
 let account: number = 0;
 let seed: Buffer;
 interface Obj {

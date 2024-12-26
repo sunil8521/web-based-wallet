@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build":"npm i && tsc ",
-    "start": " node ../web_wallet_backend/dist/index.js",
+    "start": " node ./web_wallet_backend/dist/index.js",
     "dev": "nodemon ./web_wallet_backend/src/index.ts"
   },
   "author": "",

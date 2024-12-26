@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useTransition } from "react";
 import { MoveLeft } from "lucide-react";
 import ShowInfo from "./ShowInfo";
 import { toast } from "sonner";
@@ -6,6 +6,7 @@ import { toast } from "sonner";
 const Setup = ({ setWallet, walletType }) => {
   const [phrase, setPhrase] = useState("");
   const [walletData, setWalletData] = useState(null);
+  const [ispending,startTransition]=useTransition()
 
   const handleGenerate = async () => {
     fetch("/api/generate-key", {
@@ -21,10 +22,14 @@ const Setup = ({ setWallet, walletType }) => {
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
-          setWalletData(null);
+          startTransition(() => {
+            setWalletData(null);
+          });
           toast.error(data.error);
         } else {
-          setWalletData({ phares: data.phares, key: [data.key] });
+          startTransition(() => {
+            setWalletData({ phares: data.phares, key: [data.key] });
+          });
           toast.success("Wallet successfully generated/recovered!");
         }
 
@@ -60,8 +65,10 @@ const Setup = ({ setWallet, walletType }) => {
                 className="w-full px-4 py-3 bg-transparent border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all"
               />
               <button
+                          disabled={ispending}
+
                 onClick={handleGenerate}
-                className="w-full px-8 py-3 bg-neutral-900 dark:bg-white text-white dark:text-black rounded-lg hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors"
+                className="w-full px-8 py-3 bg-neutral-900 dark:bg-white text-white dark:text-black rounded-lg hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors disabled:cursor-not-allowed"
               >
                 Recover Wallet
               </button>
@@ -74,8 +81,9 @@ const Setup = ({ setWallet, walletType }) => {
             </div>
 
             <button
+            disabled={ispending}
               onClick={handleGenerate}
-              className="w-full px-8 py-3 bg-white dark:bg-neutral-900 text-black dark:text-white border border-neutral-200 dark:border-neutral-800 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+              className="w-full px-8 py-3 bg-white dark:bg-neutral-900 text-black dark:text-white border border-neutral-200 dark:border-neutral-800 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors disabled:cursor-not-allowed"
             >
               Generate New Wallet
             </button>

@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build":"npm run build --prefix web_wallet",
-    "start": "cd web_wallet && npm install && npm run build && node ./web_wallet_backend/dist/index.js",
+    "build":"npm i && tsc ",
+    "start": "cd web_wallet && npm install && npm run build && node ../web_wallet_backend/dist/index.js",
     "dev": "nodemon ./web_wallet_backend/src/index.ts"
   },
   "author": "",

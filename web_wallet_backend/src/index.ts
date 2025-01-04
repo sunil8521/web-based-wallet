@@ -44,6 +44,9 @@ function Generate_wallet(seed: Buffer, account: number, coinType: number): Obj {
   }
 }
 
+app.get("/api/test",(req: Request, res: Response)=>{
+  res.json({message:"service is running."})
+})
 app.post(
   "/api/generate-key",
   async (req: Request, res: Response): Promise<any> => {
@@ -60,7 +63,6 @@ app.post(
         ) {
           return cleanedPhrase;
         }
-
         return null;
       };
       if (phrase) {

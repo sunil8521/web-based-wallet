@@ -1,4 +1,4 @@
-import express, { Response, Request } from "express";
+import express, { Response, Request, json } from "express";
 import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from "bip39";
 import nacl from "tweetnacl";
 import { derivePath } from "ed25519-hd-key";
@@ -9,13 +9,14 @@ import path from "path";
 import bs58 from "bs58";
 const app = express();
 app.use(express.json());
-const port=process.env.PORT||4000 
+const port = process.env.PORT || 4000;
 let account: number = 0;
 let seed: Buffer;
 interface Obj {
   public: string;
   private: string;
 }
+
 const buildPath = path.join(__dirname, "../../web_wallet/dist"); // Adjust the path as necessary
 app.use(express.static(buildPath));
 function Generate_wallet(seed: Buffer, account: number, coinType: number): Obj {
@@ -44,9 +45,9 @@ function Generate_wallet(seed: Buffer, account: number, coinType: number): Obj {
   }
 }
 
-app.get("/api/test",(req: Request, res: Response)=>{
-  res.json({message:"service is running."})
-})
+app.get("/api/test", (req: Request, res: Response) => {
+  res.json({ message: "service is running." });
+});
 app.post(
   "/api/generate-key",
   async (req: Request, res: Response): Promise<any> => {
@@ -91,6 +92,39 @@ app.post("/api/create-new", (req: Request, res: Response) => {
   const keys = Generate_wallet(seed, account, coinType);
   res.json({ key: keys });
 });
+app.post(
+  "/api/fetch-balance",
+  async (req: Request, res: Response): Promise<void> => {
+    const { adsress, coinType, stage } = req.body;
+    try {
+      const response = await fetch(
+        `https://solana-${stage}.g.alchemy.com/v2/aNHOvKvvAtTjQJgfPxCOahQHV_IntQgq`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            jsonrpc: "2.0",
+            id: 1,
+            method: "getBalance",
+            params: [adsress],
+          }),
+        }
+      );
+      if (!response.ok) {
+        res.status(response.status).json({
+          error: `Error from external API: ${response.statusText}`,
+        });
+        return;
+      }
+      const data = await response.json();
+      res.status(200).json({
+        success: true,
+        data,
+      });
+    } catch (er) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+);
 
 app.get("*", (req: Request, res: Response) => {
   res.redirect("/");

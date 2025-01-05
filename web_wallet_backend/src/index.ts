@@ -5,6 +5,7 @@ import { derivePath } from "ed25519-hd-key";
 import { Keypair } from "@solana/web3.js";
 import { ethers, Wallet, HDNodeWallet } from "ethers";
 import path from "path";
+import "dotenv/config"
 
 import bs58 from "bs58";
 const app = express();
@@ -98,7 +99,7 @@ app.post(
     const { adsress, coinType, stage } = req.body;
     try {
       const response = await fetch(
-        `https://solana-${stage}.g.alchemy.com/v2/aNHOvKvvAtTjQJgfPxCOahQHV_IntQgq`,
+        `${stage=="devnet"?process.env.DEVNET:process.env.TESTNET}`,
         {
           method: "POST",
           body: JSON.stringify({

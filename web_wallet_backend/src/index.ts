@@ -6,6 +6,7 @@ import { Keypair } from "@solana/web3.js";
 import { ethers, Wallet, HDNodeWallet } from "ethers";
 import path from "path";
 import "dotenv/config"
+import cors from "cors"
 
 import bs58 from "bs58";
 const app = express();
@@ -17,7 +18,7 @@ interface Obj {
   public: string;
   private: string;
 }
-
+app.use(cors())
 const buildPath = path.join(__dirname, "../../web_wallet/dist"); // Adjust the path as necessary
 app.use(express.static(buildPath));
 function Generate_wallet(seed: Buffer, account: number, coinType: number): Obj {

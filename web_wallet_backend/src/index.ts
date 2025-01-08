@@ -94,6 +94,8 @@ app.post("/api/create-new", (req: Request, res: Response) => {
   const keys = Generate_wallet(seed, account, coinType);
   res.json({ key: keys });
 });
+
+
 app.post(
   "/api/fetch-balance",
   async (req: Request, res: Response): Promise<void> => {
@@ -120,7 +122,7 @@ app.post(
       const data = await response.json();
       res.status(200).json({
         success: true,
-        data,
+        amount:data.result.value/1000000000,
       });
     } catch (er) {
       res.status(500).json({ error: "Internal Server Error" });

@@ -5,8 +5,8 @@ import { derivePath } from "ed25519-hd-key";
 import { Keypair } from "@solana/web3.js";
 import { ethers, Wallet, HDNodeWallet } from "ethers";
 import path from "path";
-import "dotenv/config"
-import cors from "cors"
+import "dotenv/config";
+import cors from "cors";
 
 import bs58 from "bs58";
 const app = express();
@@ -18,7 +18,7 @@ interface Obj {
   public: string;
   private: string;
 }
-app.use(cors())
+app.use(cors());
 const buildPath = path.join(__dirname, "../../web_wallet/dist"); // Adjust the path as necessary
 app.use(express.static(buildPath));
 function Generate_wallet(seed: Buffer, account: number, coinType: number): Obj {
@@ -95,14 +95,13 @@ app.post("/api/create-new", (req: Request, res: Response) => {
   res.json({ key: keys });
 });
 
-
 app.post(
   "/api/fetch-balance",
   async (req: Request, res: Response): Promise<void> => {
     const { adsress, coinType, stage } = req.body;
     try {
       const response = await fetch(
-        `${stage=="devnet"?process.env.DEVNET:process.env.TESTNET}`,
+        `${stage == "devnet" ? process.env.DEVNET : process.env.MAINNET}`,
         {
           method: "POST",
           body: JSON.stringify({
@@ -122,7 +121,7 @@ app.post(
       const data = await response.json();
       res.status(200).json({
         success: true,
-        amount:data.result.value/1000000000,
+        amount: data.result.value / 1000000000,
       });
     } catch (er) {
       res.status(500).json({ error: "Internal Server Error" });

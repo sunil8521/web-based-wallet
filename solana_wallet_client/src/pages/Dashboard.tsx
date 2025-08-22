@@ -93,7 +93,7 @@ const Dashboard = () => {
   }, [selectedWallet, network]);
 
 
- const handleAddnewWalle=()=>{
+ const handleAddnewWallet=()=>{
 
   
  }
